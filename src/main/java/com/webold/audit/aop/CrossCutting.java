@@ -1,34 +1,31 @@
 package com.webold.audit.aop;
 
+import com.webold.audit.service.Audit;
+import com.webold.core.exception.ServiceException;
+import com.webold.core.packages.audit.view.AuditException;
+import com.webold.core.packages.audit.view.AuditFactory;
 import com.webold.core.packages.audit.view.AuditHeader;
-import com.webold.core.packages.audit.view.AuditVM;
 import com.webold.core.utility.ApplicationRequest;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.webold.core.config.general.GeneralStatic.APP_KEY;
-import static com.webold.core.config.general.GeneralStatic.CORRELATION_ID;
+import static com.webold.core.config.general.GeneralStatic.*;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class CrossCutting {
 
 
-    @Value("${spring.application.name}")
-    private String microserviceName;
-
     private final ApplicationRequest request;
-
-    public CrossCutting(ApplicationRequest request) {
-        this.request = request;
-    }
+    private final Audit audit;
 
 
     @Pointcut("within(@org.springframework.stereotype.Service *)")
@@ -46,26 +43,22 @@ public class CrossCutting {
     public void logAfterReturning(JoinPoint joinPoint, Object result) {
         String methodName = joinPoint.getSignature().getName();
         String clazz = joinPoint.getSignature().getDeclaringTypeName();
-        List<Object> input = Arrays.asList(joinPoint.getArgs());
-        AuditHeader.builder()
-                .appName(microserviceName)
+        List<Object> inputs = Arrays.asList(joinPoint.getArgs());
+        AuditHeader header = AuditHeader.builder()
+                .appName(applicationName)
                 .aClass(clazz)
                 .method(methodName)
                 .correlationId(request.getHeader(CORRELATION_ID))
-                .instanceId()
-        AuditVM auditReqVM = AuditVM.builder().input(input)
-                .method(methodName)
-                .clazz(clazz)
-                .microServiceName(microserviceName)
-                .result(result)
-                .rrn(applicationRequest.getHeader(RRN))
-                .appKey(applicationRequest.getHeader(APP_KEY))
-                .token(applicationRequest.getHeader(AUTHORIZATION))
-                .type(AuditType.AFTER_RETURNING)
-                .level(LogLevel.INFO.name())
-                .time(new SimpleDateFormat(DATE_PATTERN).format(new Timestamp(System.currentTimeMillis())))
+                .instanceId(instanceId)
+                .time(new Timestamp(System.currentTimeMillis()))
+                .status(AuditFactory.Status.OK)
+                .level(LogLevel.INFO)
+                .type(AuditFactory.AuditType.AFTER_RETURNING)
+                .uri(request.getRequestURI())
+                .token(request.getHeader(AUTHORIZATION))
                 .build();
-        applicationLogger.log(auditReqVM, LogLevel.INFO);
+        AuditFactory.AuditVM auditVM = AuditFactory.builder().header(header).ok(result).inputs(inputs).build();
+        audit.info(auditVM);
     }
 
     @Before("service() || log()")
@@ -73,18 +66,21 @@ public class CrossCutting {
         String methodName = joinPoint.getSignature().getName();
         String clazz = joinPoint.getSignature().getDeclaringTypeName();
         List<Object> input = Arrays.asList(joinPoint.getArgs());
-        AuditReqVM auditReqVM = AuditReqVM.builder().input(input)
+        AuditHeader header = AuditHeader.builder()
+                .appName(applicationName)
+                .aClass(clazz)
                 .method(methodName)
-                .clazz(clazz)
-                .microServiceName(microserviceName)
-                .rrn(applicationRequest.getHeader(RRN))
-                .appKey(applicationRequest.getHeader(APP_KEY))
-                .token(applicationRequest.getHeader(AUTHORIZATION))
-                .type(AuditType.BEFORE)
-                .level(LogLevel.INFO.name())
-                .time(new SimpleDateFormat(DATE_PATTERN).format(new Timestamp(System.currentTimeMillis())))
+                .correlationId(request.getHeader(CORRELATION_ID))
+                .instanceId(instanceId)
+                .time(new Timestamp(System.currentTimeMillis()))
+                .status(AuditFactory.Status.OK)
+                .level(LogLevel.INFO)
+                .type(AuditFactory.AuditType.BEFORE)
+                .uri(request.getRequestURI())
+                .token(request.getHeader(AUTHORIZATION))
                 .build();
-        applicationLogger.log(auditReqVM, LogLevel.INFO);
+        AuditFactory.AuditVM auditVM = AuditFactory.builder().header(header).inputs(input).build();
+        audit.info(auditVM);
     }
 
     @AfterThrowing(pointcut = "service() || log()", throwing = "exception")
@@ -104,19 +100,21 @@ public class CrossCutting {
                     .excLine(exception.getStackTrace()[0].getLineNumber())
                     .excMessage(exception.getMessage()).build();
         }
-        AuditReqVM auditReqVM = AuditReqVM.builder().input(input)
+        AuditHeader header = AuditHeader.builder()
+                .appName(applicationName)
+                .aClass(clazz)
                 .method(methodName)
-                .clazz(clazz)
-                .microServiceName(microserviceName)
-                .rrn(applicationRequest.getHeader(RRN))
-                .appKey(applicationRequest.getHeader(APP_KEY))
-                .token(applicationRequest.getHeader(AUTHORIZATION))
-                .type(AuditType.AFTER_TROWING)
-                .level(LogLevel.ERROR.name())
-                .exception(auditException)
-                .time(new SimpleDateFormat(DATE_PATTERN).format(new Timestamp(System.currentTimeMillis())))
+                .correlationId(request.getHeader(CORRELATION_ID))
+                .instanceId(instanceId)
+                .time(new Timestamp(System.currentTimeMillis()))
+                .status(AuditFactory.Status.ERROR)
+                .level(LogLevel.INFO)
+                .type(AuditFactory.AuditType.AFTER_RETURNING)
+                .uri(request.getRequestURI())
+                .token(request.getHeader(AUTHORIZATION))
                 .build();
-        applicationLogger.log(auditReqVM, LogLevel.ERROR);
+        AuditFactory.AuditVM auditVM = AuditFactory.builder().header(header).inputs(input).exception(auditException).build();
+        audit.error(auditVM);
     }
 
 

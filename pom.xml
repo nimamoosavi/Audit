@@ -18,8 +18,8 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.webold</groupId>
-            <artifactId>core</artifactId>
+            <groupId>com.nicico.cost</groupId>
+            <artifactId>framework</artifactId>
             <version>1.0.1-Released</version>
         </dependency>
         <dependency>

@@ -2,6 +2,8 @@ package com.nicico.cost.audit.aop;
 
 
 import com.nicico.cost.audit.service.Audit;
+import com.nicico.cost.framework.packages.audit.view.AuditFactory;
+import com.nicico.cost.framework.packages.audit.view.AuditHeader;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.nicico.cost.framework.config.general.GeneralStatic.*;
 
 @Aspect
 @Component

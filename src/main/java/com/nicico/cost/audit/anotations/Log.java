@@ -1,4 +1,4 @@
-package com.webold.audit.anotations;
+package com.nicico.cost.audit.anotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

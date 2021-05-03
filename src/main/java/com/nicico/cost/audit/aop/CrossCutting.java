@@ -1,11 +1,7 @@
-package com.webold.audit.aop;
+package com.nicico.cost.audit.aop;
 
-import com.webold.audit.service.Audit;
-import com.webold.core.exception.ServiceException;
-import com.webold.core.packages.audit.view.AuditException;
-import com.webold.core.packages.audit.view.AuditFactory;
-import com.webold.core.packages.audit.view.AuditHeader;
-import com.webold.core.utility.ApplicationRequest;
+
+import com.nicico.cost.audit.service.Audit;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -15,8 +11,6 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.webold.core.config.general.GeneralStatic.*;
 
 @Aspect
 @Component
@@ -33,7 +27,7 @@ public class CrossCutting {
         // Do Nothing ,Aop Running
     }
 
-    @Pointcut("within(@com.webold.audit.anotations.Log *)")
+    @Pointcut("within(@com.nicico.cost.audit.anotations.Log *)")
     public void log() {
         // Do Nothing ,Aop Running
     }

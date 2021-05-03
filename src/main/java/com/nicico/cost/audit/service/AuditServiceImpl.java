@@ -1,7 +1,7 @@
-package com.webold.audit.service;
+package com.nicico.cost.audit.service;
 
-import com.webold.core.mapper.jackson.Mapper;
-import com.webold.core.packages.audit.view.AuditFactory;
+import com.nicico.cost.framework.mapper.jackson.Mapper;
+import com.nicico.cost.framework.packages.audit.view.AuditFactory;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

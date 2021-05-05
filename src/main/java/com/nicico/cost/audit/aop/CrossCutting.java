@@ -3,7 +3,7 @@ package com.nicico.cost.audit.aop;
 
 import com.nicico.cost.audit.service.Audit;
 import com.nicico.cost.framework.exception.ServiceException;
-import com.nicico.cost.framework.packages.audit.view.AuditException;
+import com.nicico.cost.framework.packages.audit.view.AuditExceptionVM;
 import com.nicico.cost.framework.packages.audit.view.AuditFactory;
 import com.nicico.cost.framework.packages.audit.view.AuditHeader;
 import com.nicico.cost.framework.utility.ApplicationRequest;
@@ -89,14 +89,14 @@ public class CrossCutting {
         String methodName = joinPoint.getSignature().getName();
         String clazz = joinPoint.getSignature().getDeclaringTypeName();
         List<Object> input = Arrays.asList(joinPoint.getArgs());
-        AuditException auditException;
+        AuditExceptionVM auditException;
         if (exception instanceof ServiceException) {
-            auditException = AuditException.builder().excClazz(exception.getStackTrace()[0].getClassName())
+            auditException = AuditExceptionVM.builder().excClazz(exception.getStackTrace()[0].getClassName())
                     .excMethod(exception.getStackTrace()[0].getMethodName())
                     .excLine(exception.getStackTrace()[0].getLineNumber())
                     .excMessage(((ServiceException) exception).getExceptionMessage()).excCode(((ServiceException) exception).getExceptionCode()).build();
         } else {
-            auditException = AuditException.builder().excClazz(exception.getStackTrace()[0].getClassName())
+            auditException = AuditExceptionVM.builder().excClazz(exception.getStackTrace()[0].getClassName())
                     .excMethod(exception.getStackTrace()[0].getMethodName())
                     .excLine(exception.getStackTrace()[0].getLineNumber())
                     .excMessage(exception.getMessage()).build();

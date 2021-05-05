@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @Service
 @RequiredArgsConstructor
-public class AuditServiceImpl implements Audit {
+public class AuditServiceImpl implements AuditService {
 
 
     private final Mapper mapper;

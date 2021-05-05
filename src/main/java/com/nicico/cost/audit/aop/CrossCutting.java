@@ -1,7 +1,7 @@
 package com.nicico.cost.audit.aop;
 
 
-import com.nicico.cost.audit.service.Audit;
+import com.nicico.cost.audit.service.AuditService;
 import com.nicico.cost.framework.exception.ServiceException;
 import com.nicico.cost.framework.packages.audit.view.AuditExceptionVM;
 import com.nicico.cost.framework.packages.audit.view.AuditFactory;
@@ -26,7 +26,7 @@ public class CrossCutting {
 
 
     private final ApplicationRequest request;
-    private final Audit audit;
+    private final AuditService audit;
 
 
     @Pointcut("within(@org.springframework.stereotype.Service *)")

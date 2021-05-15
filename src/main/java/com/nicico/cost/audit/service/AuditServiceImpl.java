@@ -1,10 +1,13 @@
 package com.nicico.cost.audit.service;
 
-import com.nicico.cost.framework.mapper.jackson.Mapper;
+import com.nicico.cost.audit.enums.Locations;
 import com.nicico.cost.framework.packages.audit.view.AuditFactory;
+import com.nicico.cost.framework.packages.kafka.service.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.stereotype.Service;
 
@@ -15,32 +18,44 @@ import javax.validation.constraints.NotNull;
 public class AuditServiceImpl implements AuditService {
 
 
-    private final Mapper mapper;
+    @Value("${audit.log.location:file}")
+    public String logLocation;
+    @Value("${audit.log.topic:audit}")
+    public String kafkaTopic;
     private static final Logger APP_LOG = LoggerFactory.getLogger("APP_LOG");
+    @Autowired(required = false)
+    public KafkaProducer kafkaProducer;
 
 
     @Override
     public void info(AuditFactory.AuditVM vm) {
-        logInfile(vm, vm.getHeader().getLevel());
+        log(vm);
     }
 
     @Override
     public void error(AuditFactory.AuditVM vm) {
-        logInfile(vm, vm.getHeader().getLevel());
+        log(vm);
     }
 
     @Override
     public void fatal(AuditFactory.AuditVM vm) {
-        logInfile(vm, vm.getHeader().getLevel());
+        log(vm);
     }
 
     @Override
     public void warn(AuditFactory.AuditVM vm) {
-        logInfile(vm, vm.getHeader().getLevel());
+        log(vm);
     }
 
-    private void logInKafka(String kafkaTopic) {
+    private void logInKafka(String kafkaTopic, Object o) {
+        kafkaProducer.send(kafkaTopic, o);
+    }
 
+    private void log(AuditFactory.AuditVM vm) {
+        if (Boolean.TRUE.equals(logLocation.equals(Locations.FILE.name())))
+            logInfile(vm, vm.getHeader().getLevel());
+        if (Boolean.TRUE.equals(logLocation.equals(Locations.KAFKA.name())))
+            logInKafka(kafkaTopic, vm);
     }
 
     private void logInfile(@NotNull Object o, @NotNull LogLevel level) {

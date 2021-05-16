@@ -2,7 +2,7 @@ package com.nicico.cost.audit.service;
 
 import com.nicico.cost.audit.enums.Locations;
 import com.nicico.cost.framework.packages.audit.view.AuditFactory;
-import com.nicico.cost.framework.packages.kafka.service.KafkaProducer;
+import com.nicico.cost.framework.packages.kafka.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

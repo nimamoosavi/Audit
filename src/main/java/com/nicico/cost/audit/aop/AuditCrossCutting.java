@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class CrossCutting {
+public class AuditCrossCutting {
 
     private final LogService logService;
 
@@ -23,7 +23,7 @@ public class CrossCutting {
         // Do Nothing ,Aop Running
     }
 
-    @Pointcut("within(@com.nicico.cost.framework.anotations.Log *)")
+    @Pointcut("@annotation(com.nicico.cost.framework.anotations.Log)")
     public void log() {
         // Do Nothing ,Aop Running
     }
@@ -34,10 +34,14 @@ public class CrossCutting {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         Log annotation = method.getAnnotation(Log.class);
-        AuditFactory.AuditType auditType = annotation.type();
-        if (Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.ALL.name())) ||
-                Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.AFTER_RETURNING.name())))
+        if (null != annotation) {
+            AuditFactory.AuditType auditType = annotation.type();
+            if (Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.ALL.name())) ||
+                    Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.AFTER_RETURNING.name())))
+                logService.logAfterReturning(joinPoint, result);
+        } else
             logService.logAfterReturning(joinPoint, result);
+
     }
 
     @Before("service() || log()")
@@ -45,10 +49,13 @@ public class CrossCutting {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         Log annotation = method.getAnnotation(Log.class);
-        AuditFactory.AuditType auditType = annotation.type();
-        if (Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.ALL.name())) ||
-                Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.BEFORE.name())))
-            logBefore(joinPoint);
+        if (annotation != null) {
+            AuditFactory.AuditType auditType = annotation.type();
+            if (Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.ALL.name())) ||
+                    Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.BEFORE.name())))
+                logService.logBefore(joinPoint);
+        } else
+            logService.logBefore(joinPoint);
     }
 
     @AfterThrowing(pointcut = "service() || log()", throwing = "exception")
@@ -56,11 +63,13 @@ public class CrossCutting {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         Log annotation = method.getAnnotation(Log.class);
-        AuditFactory.AuditType auditType = annotation.type();
-        if (Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.ALL.name())) ||
-                Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.AFTER_TROWING.name())))
-            logAfterThrowing(joinPoint, exception);
+        if (null != annotation) {
+            AuditFactory.AuditType auditType = annotation.type();
+            if (Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.ALL.name())) ||
+                    Boolean.TRUE.equals(auditType.name().equals(AuditFactory.AuditType.AFTER_TROWING.name())))
+                logService.logAfterThrowing(joinPoint, exception);
+        } else
+            logService.logAfterThrowing(joinPoint, exception);
+
     }
-
-
 }

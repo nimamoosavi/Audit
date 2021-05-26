@@ -5,6 +5,7 @@ import org.aspectj.lang.JoinPoint;
 /**
  * @author nima
  * @apiNote this services used for Log in aop Service
+ * @since 1.8
  */
 public interface LogService {
     /**

@@ -6,7 +6,7 @@ import com.nicico.cost.framework.packages.audit.view.AuditExceptionVM;
 import com.nicico.cost.framework.packages.audit.view.AuditFactory;
 import com.nicico.cost.framework.packages.audit.view.AuditHeader;
 import com.nicico.cost.framework.service.exception.ServiceException;
-import com.nicico.cost.framework.utility.request.ApplicationRequest;
+import com.nicico.cost.framework.utility.RequestUtility;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.boot.logging.LogLevel;
@@ -22,7 +22,7 @@ import static com.nicico.cost.framework.config.general.GeneralStatic.*;
 @RequiredArgsConstructor
 public class LogServiceImpl implements LogService {
 
-    private final ApplicationRequest request;
+    private final RequestUtility request;
     private final AuditService audit;
 
     @Override

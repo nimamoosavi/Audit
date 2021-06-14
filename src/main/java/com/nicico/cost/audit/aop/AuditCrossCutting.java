@@ -17,18 +17,18 @@ public class AuditCrossCutting {
 
     private final LogService logService;
 
-    @Pointcut("within(@org.springframework.stereotype.Service *)")
-    public void service() {
-        // Do Nothing ,Aop Running
-    }
-
     @Pointcut("@annotation(com.nicico.cost.framework.anotations.Log)")
     public void log() {
         // Do Nothing ,Aop Running
     }
 
+    @Pointcut("@annotation(com.nicico.cost.framework.anotations.NotLog)")
+    public void notLog() {
+        // Do Nothing ,Aop Running
+    }
 
-    @AfterReturning(pointcut = "service() || log()", returning = "result")
+
+    @AfterReturning(pointcut = "log() && !notLog()", returning = "result")
     public void logAfterReturning(JoinPoint joinPoint, Object result) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -43,7 +43,7 @@ public class AuditCrossCutting {
 
     }
 
-    @Before("service() || log()")
+    @Before("log() && !notLog()")
     public void logBefore(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -57,7 +57,7 @@ public class AuditCrossCutting {
             logService.logBefore(joinPoint);
     }
 
-    @AfterThrowing(pointcut = "service() || log()", throwing = "exception")
+    @AfterThrowing(pointcut = "log() && !notLog()", throwing = "exception")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable exception) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

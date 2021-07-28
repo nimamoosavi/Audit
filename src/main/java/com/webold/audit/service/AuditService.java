@@ -1,6 +1,6 @@
-package com.nicico.cost.audit.service;
+package com.webold.audit.service;
 
-import com.nicico.cost.framework.packages.audit.Log;
+import com.webold.framework.packages.audit.Log;
 
 /**
  * @version 1.0.1

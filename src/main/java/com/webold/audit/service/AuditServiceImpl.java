@@ -1,8 +1,8 @@
-package com.nicico.cost.audit.service;
+package com.webold.audit.service;
 
-import com.nicico.cost.audit.enums.Locations;
-import com.nicico.cost.framework.packages.audit.view.AuditFactory;
-import com.nicico.cost.framework.packages.kafka.KafkaProducer;
+import com.webold.audit.enums.Locations;
+import com.webold.framework.packages.audit.view.AuditFactory;
+import com.webold.framework.packages.kafka.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

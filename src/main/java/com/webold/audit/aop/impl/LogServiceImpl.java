@@ -1,12 +1,12 @@
-package com.nicico.cost.audit.aop.impl;
+package com.webold.audit.aop.impl;
 
-import com.nicico.cost.audit.aop.LogService;
-import com.nicico.cost.audit.service.AuditService;
-import com.nicico.cost.framework.packages.audit.view.AuditExceptionVM;
-import com.nicico.cost.framework.packages.audit.view.AuditFactory;
-import com.nicico.cost.framework.packages.audit.view.AuditHeader;
-import com.nicico.cost.framework.service.exception.ServiceException;
-import com.nicico.cost.framework.utility.RequestUtility;
+import com.webold.audit.aop.LogService;
+import com.webold.audit.service.AuditService;
+import com.webold.framework.packages.audit.view.AuditExceptionVM;
+import com.webold.framework.packages.audit.view.AuditFactory;
+import com.webold.framework.packages.audit.view.AuditHeader;
+import com.webold.framework.service.exception.ServiceException;
+import com.webold.framework.utility.RequestUtility;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.boot.logging.LogLevel;
@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.nicico.cost.framework.config.general.GeneralStatic.*;
+import static com.webold.framework.config.general.GeneralStatic.*;
 
 @Component
 @RequiredArgsConstructor

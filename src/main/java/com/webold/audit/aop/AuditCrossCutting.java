@@ -1,8 +1,8 @@
-package com.nicico.cost.audit.aop;
+package com.webold.audit.aop;
 
 
-import com.nicico.cost.framework.anotations.Log;
-import com.nicico.cost.framework.packages.audit.view.AuditFactory;
+import com.webold.framework.anotations.Log;
+import com.webold.framework.packages.audit.view.AuditFactory;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -17,12 +17,12 @@ public class AuditCrossCutting {
 
     private final LogService logService;
 
-    @Pointcut("@annotation(com.nicico.cost.framework.anotations.Log)")
+    @Pointcut("@annotation(com.webold.framework.anotations.Log)")
     public void log() {
         // Do Nothing ,Aop Running
     }
 
-    @Pointcut("@annotation(com.nicico.cost.framework.anotations.NotLog)")
+    @Pointcut("@annotation(com.webold.framework.anotations.NotLog)")
     public void notLog() {
         // Do Nothing ,Aop Running
     }

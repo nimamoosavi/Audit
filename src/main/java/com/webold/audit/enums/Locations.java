@@ -1,4 +1,4 @@
-package com.nicico.cost.audit.enums;
+package com.webold.audit.enums;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.webold.audit.enums;
+package app.ladderproject.audit.enums;
 
 import lombok.Getter;
 

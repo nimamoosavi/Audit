@@ -1,8 +1,8 @@
-package com.webold.audit.aop;
+package app.ladderproject.audit.aop;
 
 
-import com.webold.framework.anotations.Log;
-import com.webold.framework.packages.audit.view.AuditFactory;
+import app.ladderproject.core.anotations.Log;
+import app.ladderproject.core.packages.audit.view.AuditFactory;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -17,12 +17,12 @@ public class AuditCrossCutting {
 
     private final LogService logService;
 
-    @Pointcut("@annotation(com.webold.framework.anotations.Log)")
+    @Pointcut("@annotation(app.ladderproject.core.anotations.Log)")
     public void log() {
         // Do Nothing ,Aop Running
     }
 
-    @Pointcut("@annotation(com.webold.framework.anotations.NotLog)")
+    @Pointcut("@annotation(app.ladderproject.core.anotations.NotLog)")
     public void notLog() {
         // Do Nothing ,Aop Running
     }

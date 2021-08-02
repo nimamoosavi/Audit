@@ -1,8 +1,8 @@
-package com.webold.audit.service;
+package app.ladderproject.audit.service;
 
-import com.webold.audit.enums.Locations;
-import com.webold.framework.packages.audit.view.AuditFactory;
-import com.webold.framework.packages.kafka.KafkaProducer;
+import app.ladderproject.audit.enums.Locations;
+import app.ladderproject.core.packages.audit.view.AuditFactory;
+import app.ladderproject.core.packages.kafka.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
